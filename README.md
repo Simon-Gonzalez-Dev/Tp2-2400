@@ -1,7 +1,31 @@
-# PolyInfusion — TP2 (LOG2400)
+# PolyInfusion — Code de départ du TP2
 
-Application console C++17 qui simule une machine à thé PolyInfusion
-(modèles `compact` et `pro`), conçue à base de patrons de conception.
+Projet console C++17 du cours LOG2400.
+
+## Contenu fourni
+
+- Configuration CMake et instructions de compilation.
+- Choix du modèle au lancement : `compact` ou `pro`.
+- Lecture et validation syntaxique des instructions de l’énoncé.
+- Aide (`h`), sortie (`q`) et gestion de la fin de l’entrée.
+- Emplacements `TODO` pour raccorder votre conception.
+
+Les instructions métier affichent pour le moment « À implémenter ». Le choix du
+modèle est validé, mais aucun composant de machine n’est encore créé.
+Le programme ne reproduit donc pas encore les scénarios de l’énoncé.
+
+## Travail à réaliser
+
+Concevez et implémentez les classes et leurs collaborations selon l’énoncé :
+profils d’infusion, composants des modèles, réserves et notifications.
+Les règles métier (réserves initiales, seuils, pertes, sélection initiale,
+validation des ressources, etc.) restent à implémenter.
+
+Le `switch` du `main` sert uniquement à distribuer les instructions console.
+Déléguez les comportements aux objets de votre conception plutôt que de les
+implémenter dans cette boucle. Vous pouvez adapter ce point d’entrée.
+La structure `Instruction` contient des données de saisie; ce n’est pas le patron
+Commande. Aucun choix de classes métier ou de hiérarchie ne vous est imposé.
 
 ## Prérequis
 
@@ -11,28 +35,9 @@ Application console C++17 qui simule une machine à thé PolyInfusion
 
 ## Compiler et exécuter
 
-### Avec Visual Studio Code
-
-Ouvrez le dossier `PolyInfusion` dans VS Code (extensions recommandées :
-C/C++ et CMake Tools).
-
-- **Compiler** : `Ctrl+Shift+B` (`Cmd+Shift+B` sur macOS) lance la tâche « Compiler ».
-- **Exécuter** : *Terminal → Run Task…* → « Exécuter : compact » ou « Exécuter : pro ».
-- **Déboguer** : `F5`, puis choisir la configuration du modèle et de la plateforme.
-
-### En ligne de commande
-
 Depuis le dossier contenant `CMakeLists.txt` :
 
-**Linux et macOS**
-
-```sh
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-cmake --build build
-./build/PolyInfusion compact
-```
-
-**Windows — générateur Visual Studio**
+### Windows — générateur Visual Studio
 
 ```powershell
 cmake -S . -B build
@@ -44,40 +49,22 @@ Pour le modèle Pro, remplacer `compact` par `pro`.
 Avec un générateur à configuration unique (Ninja ou MinGW), l’exécutable se trouve
 généralement dans `build` plutôt que dans `build/Debug`.
 
-## Instructions
+### Linux et macOS — générateur à configuration unique
 
-| Instruction | Effet |
-|---|---|
-| `selection <vert\|noir\|oolong>` | Sélectionner le thé à préparer (réversible). |
-| `portions <nombre>` | Régler le nombre de portions, entier strictement positif (réversible). |
-| `configuration` | Afficher le thé sélectionné et le nombre de portions. |
-| `routine <solo\|duo\|matin>` | Appliquer une routine prédéfinie (réversible, une seule opération). |
-| `apercu <solo\|duo\|matin>` | Afficher les changements de réglages d’une routine. |
-| `undo` / `redo` | Annuler / rétablir le dernier changement de réglages. |
-| `infuser` | Préparer le nombre de portions configuré du thé sélectionné. |
-| `reserves` | Afficher les réserves d’eau et de thé. |
-| `remplir eau <quantite>` | Ajouter de l’eau, en millilitres. |
-| `remplir <vert\|noir\|oolong> <quantite>` | Ajouter du thé, en grammes. |
-| `notifications <activer\|désactiver>` | Gérer les notifications à distance. |
-| `h` / `q` | Afficher l’aide / quitter. |
+```sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+./build/PolyInfusion compact
+```
 
-Les instructions sont en minuscules. Les quantités de remplissage doivent être
-strictement positives; utilisez un point pour les décimales (`remplir vert 1.5`).
+## Utilisation
+
+Entrez `h` pour l’aide et `q` pour quitter. Une ligne vide est ignorée.
+Les instructions sont en minuscules. `infuser` ne prend aucun argument.
+Les quantités de remplissage doivent être strictement positives et finies;
+utilisez un point pour les décimales, par exemple `remplir vert 1.5`.
+`notifications désactiver` et `notifications desactiver` sont acceptées.
 Les erreurs de syntaxe ne déclenchent aucune instruction métier.
-
-## Conception
-
-| Patron | Classes | Rôle |
-|---|---|---|
-| Fabrique abstraite | `FabriqueMachine`, `FabriqueCompact`, `FabriquePro` | Créer une famille cohérente de composants pour le modèle choisi. |
-| Stratégie + Méthode gabarit | `ProfilInfusion`, `InfusionDirecte`, `InfusionAvecRincage` | Étapes et paramètres de préparation selon le thé. |
-| Observateur | `Reserves`, `ObservateurReserves`, `AlerteEcran`, `NotificationDistante` | Alertes lorsqu’une réserve franchit son seuil. |
-| Commande | `CommandeReglage`, `CommandeSelection`, `CommandePortions`, `Historique` | Changements de réglages exécutables, annulables et rétablissables. |
-| Composite | `Routine` | Regrouper des commandes et des sous-routines en une seule opération. |
-| Itérateur | `IterateurCommandes` | Parcourir les commandes élémentaires d’une routine pour l’aperçu. |
-| Façade | `PolyInfusion` | Point d’entrée unique utilisé par la console. |
-
-Le diagramme de classes se trouve dans [docs/diagramme-classes.md](docs/diagramme-classes.md).
 
 ## Organisation
 
@@ -85,11 +72,14 @@ Le diagramme de classes se trouve dans [docs/diagramme-classes.md](docs/diagramm
 PolyInfusion/
 ├── CMakeLists.txt
 ├── README.md
-├── .vscode/    Projet Visual Studio Code (tâches et débogage)
-├── docs/       Diagramme de classes et document de discussion
-├── include/    Tous les fichiers .h
-└── src/        Tous les fichiers .cpp, dont main.cpp
+├── include/
+│   └── console/Console.h
+└── src/
+    ├── main.cpp
+    └── console/Console.cpp
 ```
 
-Pour ajouter un fichier `.cpp`, l’inscrire dans la liste `add_executable` de
-`CMakeLists.txt`, puis relancer la configuration CMake.
+Ajoutez vos fichiers `.h` dans `include` et vos `.cpp` dans `src`, en choisissant
+une organisation adaptée à votre conception. Ajoutez chaque nouveau `.cpp`
+à la liste `add_executable` du fichier `CMakeLists.txt`, puis relancez
+`cmake -S . -B build` et la compilation.
