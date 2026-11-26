@@ -1,4 +1,4 @@
-#include "console/Console.h"
+#include "Console.h"
 
 #include <cmath>
 #include <iostream>
@@ -19,6 +19,16 @@ console::Instruction invalide(const std::string& message)
     resultat.type = console::TypeInstruction::Invalide;
     resultat.erreur = message;
     return resultat;
+}
+
+bool lirePortions(const std::string& texte, int& portions)
+{
+    // Entier strictement positif, écrit uniquement avec des chiffres.
+    if (texte.empty() || texte.size() > 9 || texte.find_first_not_of("0123456789") != std::string::npos) {
+        return false;
+    }
+    portions = std::stoi(texte);
+    return portions > 0;
 }
 
 bool lireQuantite(const std::string& texte, double& quantite)
@@ -70,12 +80,27 @@ Instruction analyser(const std::string& ligne)
         }
         resultat.type = TypeInstruction::Notifications;
         resultat.notificationsActives = mots[1] == "activer";
-    } else if (nom == "infuser" || nom == "reserves" || nom == "h" || nom == "q") {
+    } else if (nom == "portions") {
+        if (mots.size() != 2 || !lirePortions(mots[1], resultat.portions)) {
+            return invalide("le nombre de portions doit être un entier strictement positif.");
+        }
+        resultat.type = TypeInstruction::Portions;
+    } else if (nom == "routine" || nom == "apercu") {
+        if (mots.size() != 2) {
+            return invalide("Utilisation : " + nom + " <nom>.");
+        }
+        resultat.type = nom == "routine" ? TypeInstruction::Routine : TypeInstruction::Apercu;
+        resultat.routine = mots[1];
+    } else if (nom == "infuser" || nom == "reserves" || nom == "configuration"
+               || nom == "undo" || nom == "redo" || nom == "h" || nom == "q") {
         if (mots.size() != 1) {
             return invalide("Cette instruction ne prend aucun argument.");
         }
         if (nom == "infuser") resultat.type = TypeInstruction::Infuser;
         else if (nom == "reserves") resultat.type = TypeInstruction::Reserves;
+        else if (nom == "configuration") resultat.type = TypeInstruction::Configuration;
+        else if (nom == "undo") resultat.type = TypeInstruction::Annuler;
+        else if (nom == "redo") resultat.type = TypeInstruction::Retablir;
         else if (nom == "h") resultat.type = TypeInstruction::Aide;
         else resultat.type = TypeInstruction::Quitter;
     } else {
@@ -88,7 +113,13 @@ void afficherAide()
 {
     std::cout
         << "selection <vert|noir|oolong> : sélectionner le thé à préparer.\n"
-        << "infuser : préparer une portion du thé sélectionné.\n"
+        << "portions <nombre> : régler le nombre de portions à préparer.\n"
+        << "configuration : afficher le thé sélectionné et le nombre de portions.\n"
+        << "routine <nom> : appliquer une routine prédéfinie (solo, duo, matin).\n"
+        << "apercu <nom> : afficher les changements de réglages d’une routine.\n"
+        << "undo : annuler le dernier changement de réglages.\n"
+        << "redo : rétablir le dernier changement de réglages annulé.\n"
+        << "infuser : préparer le nombre de portions configuré du thé sélectionné.\n"
         << "reserves : afficher les réserves d’eau et de thé.\n"
         << "remplir eau <quantite> : ajouter de l’eau, en millilitres.\n"
         << "remplir <vert|noir|oolong> <quantite> : ajouter du thé, en grammes.\n"

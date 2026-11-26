@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "PolyInfusion compact (Linux / macOS)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/PolyInfusion",
+            "args": ["compact"],
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "osx": { "MIMode": "lldb" },
+            "preLaunchTask": "Compiler"
+        },
+        {
+            "name": "PolyInfusion pro (Linux / macOS)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/PolyInfusion",
+            "args": ["pro"],
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "osx": { "MIMode": "lldb" },
+            "preLaunchTask": "Compiler"
+        },
+        {
+            "name": "PolyInfusion compact (Windows)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/PolyInfusion.exe",
+            "args": ["compact"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "preLaunchTask": "Compiler"
+        },
+        {
+            "name": "PolyInfusion pro (Windows)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/PolyInfusion.exe",
+            "args": ["pro"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "preLaunchTask": "Compiler"
+        }
+    ]
+}

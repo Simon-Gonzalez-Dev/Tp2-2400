@@ -1,0 +1,37 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Configurer (CMake)",
+            "type": "shell",
+            "command": "cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug",
+            "problemMatcher": []
+        },
+        {
+            "label": "Compiler",
+            "type": "shell",
+            "command": "cmake --build build --config Debug",
+            "dependsOn": "Configurer (CMake)",
+            "group": { "kind": "build", "isDefault": true },
+            "problemMatcher": ["$gcc", "$msCompile"]
+        },
+        {
+            "label": "Exécuter : compact",
+            "type": "shell",
+            "command": "./build/PolyInfusion compact",
+            "windows": { "command": ".\\build\\Debug\\PolyInfusion.exe compact" },
+            "dependsOn": "Compiler",
+            "presentation": { "focus": true, "panel": "dedicated" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Exécuter : pro",
+            "type": "shell",
+            "command": "./build/PolyInfusion pro",
+            "windows": { "command": ".\\build\\Debug\\PolyInfusion.exe pro" },
+            "dependsOn": "Compiler",
+            "presentation": { "focus": true, "panel": "dedicated" },
+            "problemMatcher": []
+        }
+    ]
+}

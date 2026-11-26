@@ -1,6 +1,10 @@
-#include "console/Console.h"
+#include "PolyInfusion.h"
+#include "Console.h"
+#include "FabriqueCompact.h"
+#include "FabriquePro.h"
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 #ifdef _WIN32
@@ -20,12 +24,16 @@ int main(int argc, char* argv[])
         std::cerr << "Utilisation : PolyInfusion <compact|pro>\n";
         return 1;
     }
-    const std::string modele = argv[1];
-
-    // TODO : créer et initialiser les objets de votre conception pour le modèle choisi.
-    // Ce gabarit ne fournit aucune logique métier ni implémentation de patron.
-    std::cout << "Machine PolyInfusion démarrée : modèle "
-              << (modele == "compact" ? "Compact" : "Pro") << ".\n";
+    // Seul endroit qui connaît les modèles concrets : la fabrique choisie ici
+    // garantit que tous les composants appartiennent au même modèle.
+    std::unique_ptr<FabriqueMachine> fabrique;
+    if (std::string(argv[1]) == "compact") {
+        fabrique = std::make_unique<FabriqueCompact>();
+    } else {
+        fabrique = std::make_unique<FabriquePro>();
+    }
+    PolyInfusion application(*fabrique);
+    application.afficherDemarrage();
 
     for (std::string ligne; std::cout << "> " << std::flush, std::getline(std::cin, ligne);) {
         const auto instruction = console::analyser(ligne);
@@ -42,28 +50,40 @@ int main(int argc, char* argv[])
             std::cout << "Erreur : " << instruction.erreur << '\n';
             break;
         case console::TypeInstruction::Selection:
-            // TODO : déléguer la sélection à votre application (instruction.the).
-            std::cout << "À implémenter : sélection du thé.\n";
+            application.selectionner(instruction.the);
+            break;
+        case console::TypeInstruction::Portions:
+            application.reglerPortions(instruction.portions);
+            break;
+        case console::TypeInstruction::Configuration:
+            application.afficherConfiguration();
+            break;
+        case console::TypeInstruction::Routine:
+            application.appliquerRoutine(instruction.routine);
+            break;
+        case console::TypeInstruction::Apercu:
+            application.afficherApercu(instruction.routine);
+            break;
+        case console::TypeInstruction::Annuler:
+            application.annuler();
+            break;
+        case console::TypeInstruction::Retablir:
+            application.retablir();
             break;
         case console::TypeInstruction::Infuser:
-            // TODO : déléguer la préparation d’une portion à votre application.
-            std::cout << "À implémenter : préparation du thé.\n";
+            application.infuser();
             break;
         case console::TypeInstruction::Reserves:
-            // TODO : déléguer l’affichage des réserves à votre application.
-            std::cout << "À implémenter : affichage des réserves.\n";
+            application.afficherReserves();
             break;
         case console::TypeInstruction::RemplirEau:
-            // TODO : déléguer le remplissage (instruction.quantite, en mL).
-            std::cout << "À implémenter : remplissage d’eau.\n";
+            application.remplirEau(instruction.quantite);
             break;
         case console::TypeInstruction::RemplirThe:
-            // TODO : déléguer le remplissage (instruction.the, instruction.quantite en g).
-            std::cout << "À implémenter : remplissage de thé.\n";
+            application.remplirThe(instruction.the, instruction.quantite);
             break;
         case console::TypeInstruction::Notifications:
-            // TODO : déléguer l’abonnement ou le désabonnement (instruction.notificationsActives).
-            std::cout << "À implémenter : gestion des notifications à distance.\n";
+            application.reglerNotificationsDistantes(instruction.notificationsActives);
             break;
         }
     }
