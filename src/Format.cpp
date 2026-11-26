@@ -18,9 +18,6 @@ std::string formaterNombre(double valeur)
     if (texte.back() == '.') {
         texte.pop_back();
     }
-    if (texte == "-0") {
-        texte = "0";
-    }
     std::replace(texte.begin(), texte.end(), '.', ',');
     return texte;
 }

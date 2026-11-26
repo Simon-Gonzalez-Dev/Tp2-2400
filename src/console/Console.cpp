@@ -1,4 +1,4 @@
-#include "Console.h"
+#include "console/Console.h"
 
 #include <cmath>
 #include <iostream>
@@ -23,7 +23,7 @@ console::Instruction invalide(const std::string& message)
 
 bool lirePortions(const std::string& texte, int& portions)
 {
-    // Entier strictement positif, écrit uniquement avec des chiffres.
+    // Entier strictement positif : uniquement des chiffres, sans dépassement.
     if (texte.empty() || texte.size() > 9 || texte.find_first_not_of("0123456789") != std::string::npos) {
         return false;
     }
@@ -113,17 +113,17 @@ void afficherAide()
 {
     std::cout
         << "selection <vert|noir|oolong> : sélectionner le thé à préparer.\n"
-        << "portions <nombre> : régler le nombre de portions à préparer.\n"
-        << "configuration : afficher le thé sélectionné et le nombre de portions.\n"
-        << "routine <nom> : appliquer une routine prédéfinie (solo, duo, matin).\n"
-        << "apercu <nom> : afficher les changements de réglages d’une routine.\n"
-        << "undo : annuler le dernier changement de réglages.\n"
-        << "redo : rétablir le dernier changement de réglages annulé.\n"
         << "infuser : préparer le nombre de portions configuré du thé sélectionné.\n"
         << "reserves : afficher les réserves d’eau et de thé.\n"
         << "remplir eau <quantite> : ajouter de l’eau, en millilitres.\n"
         << "remplir <vert|noir|oolong> <quantite> : ajouter du thé, en grammes.\n"
         << "notifications <activer|désactiver> : gérer les notifications à distance.\n"
+        << "portions <nombre> : régler le nombre de portions à préparer.\n"
+        << "configuration : afficher le thé sélectionné et le nombre de portions.\n"
+        << "routine <nom> : appliquer une routine prédéfinie.\n"
+        << "apercu <nom> : afficher les changements de réglages d’une routine.\n"
+        << "undo : annuler le dernier changement de réglages.\n"
+        << "redo : rétablir le dernier changement de réglages annulé.\n"
         << "h : afficher cette aide.\n"
         << "q : quitter l’application.\n";
 }

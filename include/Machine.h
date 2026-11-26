@@ -17,8 +17,6 @@ public:
     Machine(const FabriqueMachine& fabrique, Reserves& reserves);
     ~Machine();
 
-    const std::string& nomModele() const { return nomModele_; }
-
     // Prépare les portions demandées. Refuse, sans rien consommer, si les
     // réserves ne couvrent pas l'ensemble des portions (pertes incluses).
     bool preparer(const ProfilInfusion& profil, int portions);
@@ -35,7 +33,6 @@ public:
 private:
     bool verifierReserve(const std::string& cle, double quantiteRequise) const;
 
-    std::string nomModele_;
     std::unique_ptr<SystemeChauffage> chauffage_;
     std::unique_ptr<DistributeurEau> distributeurEau_;
     std::unique_ptr<DistributeurThe> distributeurThe_;

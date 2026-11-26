@@ -2,11 +2,6 @@
 
 #include "ComposantsPro.h"
 
-std::string FabriquePro::nomModele() const
-{
-    return "Pro";
-}
-
 std::unique_ptr<SystemeChauffage> FabriquePro::creerChauffage() const
 {
     return std::make_unique<ChauffagePro>();

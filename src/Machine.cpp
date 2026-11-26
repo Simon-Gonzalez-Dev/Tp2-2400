@@ -11,8 +11,7 @@
 #include <iostream>
 
 Machine::Machine(const FabriqueMachine& fabrique, Reserves& reserves)
-    : nomModele_(fabrique.nomModele()),
-      chauffage_(fabrique.creerChauffage()),
+    : chauffage_(fabrique.creerChauffage()),
       distributeurEau_(fabrique.creerDistributeurEau()),
       distributeurThe_(fabrique.creerDistributeurThe()),
       reserves_(reserves)

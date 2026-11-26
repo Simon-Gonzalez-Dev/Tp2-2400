@@ -13,7 +13,7 @@
 PolyInfusion::PolyInfusion(const FabriqueMachine& fabrique)
     : machine_(fabrique, reserves_)
 {
-    //                                            thé       g    mL     °C     s
+    // Paramètres : thé, feuilles (g), volume servi (mL), température (°C), infusion (s).
     ajouterProfil(std::make_unique<InfusionDirecte>(
         ParametresInfusion{"vert", 5.0, 250.0, 80.0, 120.0}));
     ajouterProfil(std::make_unique<InfusionDirecte>(
@@ -29,17 +29,8 @@ PolyInfusion::PolyInfusion(const FabriqueMachine& fabrique)
 
 PolyInfusion::~PolyInfusion() = default;
 
-void PolyInfusion::afficherDemarrage() const
-{
-    std::cout << "Machine PolyInfusion démarrée : modèle " << machine_.nomModele() << ".\n";
-}
-
 void PolyInfusion::selectionner(const std::string& the)
 {
-    if (profils_.find(the) == profils_.end()) {
-        std::cout << "Erreur : thé inconnu : " << the << ".\n";
-        return;
-    }
     CommandeSelection commande(reglages_, the);
     historique_.executer(commande.cloner());
     std::cout << commande.confirmation() << '\n';

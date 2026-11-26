@@ -23,8 +23,6 @@ public:
     explicit PolyInfusion(const FabriqueMachine& fabrique);
     ~PolyInfusion();
 
-    void afficherDemarrage() const;
-
     // Réglages (opérations réversibles).
     void selectionner(const std::string& the);
     void reglerPortions(int portions);

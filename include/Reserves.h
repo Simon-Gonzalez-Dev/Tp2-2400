@@ -29,6 +29,7 @@ public:
 
 private:
     Reserve& trouver(const std::string& cle);
+    const Reserve& trouver(const std::string& cle) const;
     void signaler(const Reserve& reserve, TransitionReserve transition) const;
 
     // Vecteur plutôt que map : l'ordre d'insertion est l'ordre d'affichage.

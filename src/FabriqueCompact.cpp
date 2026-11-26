@@ -2,11 +2,6 @@
 
 #include "ComposantsCompact.h"
 
-std::string FabriqueCompact::nomModele() const
-{
-    return "Compact";
-}
-
 std::unique_ptr<SystemeChauffage> FabriqueCompact::creerChauffage() const
 {
     return std::make_unique<ChauffageCompact>();

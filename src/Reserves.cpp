@@ -42,12 +42,7 @@ void Reserves::desabonner(ObservateurReserves& observateur)
 
 const Reserve& Reserves::reserve(const std::string& cle) const
 {
-    for (const auto& [nom, reserve] : reserves_) {
-        if (nom == cle) {
-            return reserve;
-        }
-    }
-    throw std::out_of_range("Réserve inconnue : " + cle);
+    return trouver(cle);
 }
 
 void Reserves::retirer(const std::string& cle, double quantite)
@@ -71,7 +66,22 @@ void Reserves::afficher() const
 
 Reserve& Reserves::trouver(const std::string& cle)
 {
-    return const_cast<Reserve&>(reserve(cle));
+    for (auto& [nom, reserve] : reserves_) {
+        if (nom == cle) {
+            return reserve;
+        }
+    }
+    throw std::out_of_range("Réserve inconnue : " + cle);
+}
+
+const Reserve& Reserves::trouver(const std::string& cle) const
+{
+    for (const auto& [nom, reserve] : reserves_) {
+        if (nom == cle) {
+            return reserve;
+        }
+    }
+    throw std::out_of_range("Réserve inconnue : " + cle);
 }
 
 void Reserves::signaler(const Reserve& reserve, TransitionReserve transition) const

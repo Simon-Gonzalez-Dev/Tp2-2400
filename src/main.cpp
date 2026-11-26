@@ -1,7 +1,8 @@
-#include "PolyInfusion.h"
-#include "Console.h"
+#include "console/Console.h"
+
 #include "FabriqueCompact.h"
 #include "FabriquePro.h"
+#include "PolyInfusion.h"
 
 #include <iostream>
 #include <memory>
@@ -24,16 +25,19 @@ int main(int argc, char* argv[])
         std::cerr << "Utilisation : PolyInfusion <compact|pro>\n";
         return 1;
     }
-    // Seul endroit qui connaît les modèles concrets : la fabrique choisie ici
-    // garantit que tous les composants appartiennent au même modèle.
+    const std::string modele = argv[1];
+
+    // La fabrique choisie ici détermine tous les composants de la machine.
     std::unique_ptr<FabriqueMachine> fabrique;
-    if (std::string(argv[1]) == "compact") {
+    if (modele == "compact") {
         fabrique = std::make_unique<FabriqueCompact>();
     } else {
         fabrique = std::make_unique<FabriquePro>();
     }
     PolyInfusion application(*fabrique);
-    application.afficherDemarrage();
+
+    std::cout << "Machine PolyInfusion démarrée : modèle "
+              << (modele == "compact" ? "Compact" : "Pro") << ".\n";
 
     for (std::string ligne; std::cout << "> " << std::flush, std::getline(std::cin, ligne);) {
         const auto instruction = console::analyser(ligne);

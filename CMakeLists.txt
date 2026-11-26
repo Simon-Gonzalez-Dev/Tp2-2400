@@ -3,7 +3,7 @@ project(PolyInfusion LANGUAGES CXX)
 
 add_executable(PolyInfusion
     src/main.cpp
-    src/Console.cpp
+    src/console/Console.cpp
     src/Format.cpp
     src/PolyInfusion.cpp
     src/Composants.cpp
